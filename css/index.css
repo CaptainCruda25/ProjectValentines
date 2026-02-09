@@ -1,0 +1,8 @@
+body {
+    width: 0;
+    height: 0;
+    background-color: #FFD6C9;
+    display: flex;
+    align-content: center;
+    margin: 0;
+}

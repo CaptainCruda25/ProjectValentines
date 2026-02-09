@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Love Letter For You!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5eefc;
+  font-family: "Georgia", serif;
+}
+
+/* ===== ENVELOPE WRAPPER ===== */
+.envelope-wrapper {
+  width: 90%;
+  max-width: 300px;
+  height: auto;
+  aspect-ratio: 5 / 3;
+  perspective: 800px;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* Teaser text on envelope */
+.envelope-wrapper::before {
+  content: "A special message awaits you… 💌";
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #6f42c1;
+  font-size: 16px;
+  font-style: italic;
+}
+
+/* ===== ENVELOPE ===== */
+.envelope {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+/* Envelope body */
+.envelope .body {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f9e6fb, #e3c6f2);
+  border: 2px solid #d29ce3;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Flap */
+.envelope .flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60%;
+  background: linear-gradient(135deg, #c58fe3, #b66ed0);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top;
+  transition: transform 0.6s ease;
+  z-index: 2;
+  box-shadow: inset -2px -2px 5px rgba(255,255,255,0.3);
+}
+
+/* Letter inside preview */
+.envelope .letter-preview {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 160px;
+  background: #fffdfa;
+  border: 1px solid #e6d9f2;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.4s;
+}
+
+/* Flap open */
+.envelope.open .flap {
+  transform: rotateX(180deg);
+}
+.envelope.open .letter-preview {
+  opacity: 1;
+}
+
+/* ===== MODAL LETTER ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s;
+  z-index: 10;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.paper {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 28px,
+      rgba(160,120,255,0.08) 29px
+    ),
+    radial-gradient(circle at 30px 30px, rgba(160,120,255,0.25) 3px, transparent 4px),
+    #fffdfa;
+
+  background-size: auto, 90px 90px;
+  width: 90%;
+  max-width: 420px;
+
+  /* 👇 THIS IS THE IMPORTANT PART */
+  max-height: 80vh;
+  overflow: hidden;
+
+  padding: 35px;
+  border-radius: 6px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  animation: paperIn 0.5s ease;
+}
+
+/* ===== COUNTDOWN ===== */
+.countdown {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 20px 0 25px;
+  padding: 15px;
+  background: rgba(111, 66, 193, 0.08);
+  border: 1px solid rgba(111, 66, 193, 0.2);
+  border-radius: 10px;
+}
+
+.time-box {
+  flex: 1;
+  text-align: center;
+  background: #fffdfa;
+  border-radius: 8px;
+  padding: 10px 5px;
+  box-shadow: inset 0 0 10px rgba(160,120,255,0.15);
+}
+
+.time-box .num {
+  display: block;
+  font-size: 26px;
+  font-weight: bold;
+  color: #6f42c1;
+  font-family: "Georgia", serif;
+}
+
+.time-box .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777;
+}
+
+@media (max-width: 400px) {
+  .time-box .num {
+    font-size: 20px;
+  }
+
+  .time-box .label {
+    font-size: 10px;
+  }
+}
+
+/* Soft pulse effect (romantic, subtle) */
+.time-box {
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.paper h3 {
+  text-align: center;
+  color: #6f42c1;
+  margin-top: 0;
+}
+
+.paper-content {
+  max-height: calc(80vh - 150px);
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* optional – nicer scrollbar */
+.paper-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.paper-content::-webkit-scrollbar-thumb {
+  background: rgba(111, 66, 193, 0.4);
+  border-radius: 10px;
+}
+
+.paper p {
+  line-height: 1.8;
+  color: #333;
+}
+
+.close-btn {
+  margin-top: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background: #6f42c1;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+@keyframes paperIn {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="envelope-wrapper" id="envelopeWrapper">
+  <div class="envelope" id="envelope">
+    <div class="flap"></div>
+    <div class="body"></div>
+    <div class="letter-preview"></div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="paper">
+    <!-- Countdown Section -->
+    <div class="countdown">
+        <div class="time-box">
+            <span class="num" id="days">00</span>
+            <span class="label">Days</span>
+        </div>
+        <div class="time-box">
+            <span class="num" id="hours">00</span>
+            <span class="label">Hours</span>
+        </div>
+        <div class="time-box">
+            <span class="num" id="minutes">00</span>
+            <span class="label">Minutes</span>
+        </div>
+        <div class="time-box">
+            <span class="num" id="seconds">00</span>
+            <span class="label">Seconds</span>
+        </div>
+    </div>
+
+    <div class="paper-content" hidden>
+        <main>
+            <h3>Liya 💜 </h3>
+            <p>
+                Simula ng tayo'y maging magkakilala,<br>
+                Kakaibang silakbo ang ipinadama.<br>
+                Tulad ng isang magandang tanawin <br>
+                Na kaakit-akit sa paningin.
+            </p>
+            <p>
+                Masasabing isa kang luningning<br>
+                Sa lugar na puro dilim.<br>
+                Tulad mo'y hindi padadaig,<br>
+                Problema mo'y winawaksi.             
+            </p>
+            <p>
+                Kasiyahang iyong hatid,<br>
+                Pagod iyong pinapawi.<br>
+                Labi mong kay tamis,<br>
+                Sarap haplusin ng ilang ulit.
+            </p>
+            <p>
+                Halimuyak mong walang katumbas.<br>
+                Larawan mong walang kupas.<br>
+                Diwa ko iyong binubuhay,<br>
+                Pinipithaya kang tunay.
+            </p>
+            <p>
+                Masasakit na iyong dinanas,<br>
+                Sa mundong puno ng paghihirap.<br> 
+                Ako'y iyong sandata't kalasag<br>
+                Iduduyan ka sa bisig ng pag-ibig.
+                
+            </p>
+            <p>
+                O aking Liya, natatangi ka,
+                Kariktang 'di malilimutan.
+                Hindi matatawaran nino man.
+                Bukod tangi kang aking Liya.  
+            </p>
+            <p>
+                Maligayang araw ng mga puso.<br>
+                Hangad ko ang pagsinta mo.<br>
+                Pithaya ka ng aking puso,<br>
+                Hiraya ka ng isang tulad ko.
+            </p>
+            <p style="text-align: right;">
+                Nagmamahal, <br>
+                Iyong Ginoo
+            </p>
+        </main>
+    </div>
+    <button class="close-btn" id="closeBtn">Close</button>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="music/Pag-ibig ng Ikaw at Ako - Earl Agustin (Official Lyric Video).mp3" type="audio/mpeg">
+  </audio>
+
+</div>
+
+<script>
+const envelope = document.getElementById("envelope");
+const modal = document.getElementById("modal");
+const closeBtn = document.getElementById("closeBtn");
+const music = document.getElementById("bgMusic");
+
+// Count down  
+const targetDate = new Date("2026-02-14T00:00:00");
+
+envelope.addEventListener("click", () => {
+  envelope.classList.add("open");
+
+  setInterval(() => {
+        const now = new Date();
+        const diff = targetDate - now;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(diff  % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+        const minutes = Math.floor(diff % (1000 * 60 * 60) / (1000 * 60));
+        const seconds = Math.floor(diff % (1000 * 60) / 1000);
+        
+
+        document.getElementById("days").textContent = days;
+        document.getElementById('hours').textContent = hours;
+        document.getElementById("minutes").textContent = minutes;
+        document.getElementById("seconds").textContent = seconds;
+
+        if(diff <= 0){
+            console.log('Time reached!');
+            document.querySelector('.countdown').style.display = 'none';
+            document.querySelector('.paper-content').removeAttribute('hidden');
+
+            // 🎵 play music safely
+            music.play().catch(() => {
+                console.log("Music blocked until user interaction");
+            });
+            return;
+
+        }
+
+        
+    }, 1000);
+
+  setTimeout(() => {
+    modal.classList.add("show");
+  }, 700);
+});
+
+closeBtn.addEventListener("click", () => {
+  modal.classList.remove("show");
+  envelope.classList.remove("open");
+  music.pause();      // optional
+  music.currentTime = 0; // optional reset
+});
+
+
+</script>
+
+
+</body>
+</html>
