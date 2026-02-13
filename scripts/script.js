@@ -2,6 +2,7 @@ const envelope = document.getElementById("envelope");
 const modal = document.getElementById("modal");
 const closeBtn = document.getElementById("closeBtn");
 const music = document.getElementById("bgMusic");
+let countdownInterval;
 
 // Count down  
 const targetDate = new Date("2026-02-14T00:00:00");
@@ -9,7 +10,7 @@ const targetDate = new Date("2026-02-14T00:00:00");
 envelope.addEventListener("click", () => {
   envelope.classList.add("open");
 
-  let countdownInterval = setInterval(() => {
+  countdownInterval = setInterval(() => {
         const now = new Date();
         const diff = targetDate - now;
 
